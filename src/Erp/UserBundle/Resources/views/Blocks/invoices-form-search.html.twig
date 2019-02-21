@@ -1,0 +1,20 @@
+<div class="filter-area">
+    <div class="container">
+
+        {{ form_start(form) }}
+            <div class="filter-options">
+               <div class="col-xs-12 col-md-2">
+                    {{ form_label(form.dateFrom) }}
+                    {{ form_widget(form.dateFrom, {'attr': {'class': 'form-control date'}}) }}
+                </div>
+                <div class="col-xs-12 col-md-2">
+                    {{ form_label(form.dateTo) }}
+                    {{ form_widget(form.dateTo, {'attr': {'class': 'form-control date'}}) }}
+
+                    <label for="filter">&nbsp;</label><br/>
+                    <button id="filter" name="filter" type="submit">Find</button>
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>

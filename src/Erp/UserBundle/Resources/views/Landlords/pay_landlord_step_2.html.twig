@@ -1,0 +1,24 @@
+{% form_theme form 'ErpUserBundle:Form:form_horizontal.html.twig' %}
+{% import '::widgets/form_errors.html.twig' as form_custom_errors %}
+<div class="container-fluid">
+    <div class="row text-right">
+        <h1 class="text-center bold-text">Step 2: <br/> {{ landlord }} </h1>
+        <div class="row text-center">
+            <div class="col-md-12" id="pay_to_landlord_form">
+                {{ form_start(form,{'method': 'POST','action': path('erp_user_landlords_pay_landlord') }) }}
+                <input type="hidden" name="landlordId" value="{{ landlord.id }}"/>
+                <label><span><input type="checkbox" name="accepted" id="accepted" checked required></span></span><strong>Accept:</strong> sure or approve transfer the following payment to the said landlord</label>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $("#accepted").click(function() {
+            $("#erp_user_landlords_pay_landlord_button").attr("disabled", !this.checked);
+        });
+    });
+</script>
+
+

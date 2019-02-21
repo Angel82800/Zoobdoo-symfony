@@ -1,0 +1,19 @@
+<div class="tabs-area">
+    <div class="container" style="justify-content:left;">
+        <ul class="tabset">
+            <li>
+                <a href="{{ path('erp_property_listings_edit_documents', {'propertyId': property.id}) }}" class="{{ currentRoute == 'erp_property_listings_edit_documents' ? 'active':''}}">Property Details</a>
+            </li>
+
+            <li>
+            <a href="{{ path('erp_property_property_settings_edit', {'propertyId': property.id}) }}" class="{{ currentRoute == 'erp_property_property_settings_edit' ? 'active':''}}">Edit Payment Settings</a>  
+            </li>
+            <li>
+                <a href="{{ path('erp_property_listings_wizard_edit_images', {'propertyId': property.id}) }}" class="{{ currentRoute == 'erp_property_listings_wizard_edit_images' ? 'active':''}}">Property Images</a>
+            </li>
+            <li>
+                <a href="{{ path('erp_property_listings_edit_documents', {'propertyId': property.id}) }}" class="{{ currentRoute == 'erp_property_listings_edit_documents' ? 'active':''}}">Property Documents</a>                        
+            </li>
+        </ul>
+    </div>
+</div>

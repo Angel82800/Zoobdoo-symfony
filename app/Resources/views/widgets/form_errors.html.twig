@@ -1,0 +1,12 @@
+{% macro widget(form) %}
+    {% spaceless %}
+        {% if form.vars.errors|length %}
+            {% for error in form.vars.errors %}
+                <span class="alert alert-danger">
+                    {{ error.message }}
+                </span>
+                <br>
+            {% endfor %}
+        {% endif %}
+    {% endspaceless %}
+{% endmacro %}

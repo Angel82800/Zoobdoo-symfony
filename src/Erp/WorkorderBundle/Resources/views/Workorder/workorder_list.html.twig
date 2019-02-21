@@ -1,0 +1,57 @@
+{% if (pagination|length) %}
+    {% for item in pagination %}
+        <div class="open-close1 red-border">
+            <a href="#" class="opener">
+                <span class="col">
+                    <span class="title">Description</span>
+                    <span class="text">{{ item.description }}</span>
+                </span>
+                <span class="col">
+                    <span class="title">Status</span>
+                    {% if (item.status == 0) %}
+                        <span class="text red">
+                            {{ status[item.status] }}
+                        </span>
+                    {% elseif (item.status == 1) %}
+                        <span class="text blue">
+                            {{ status[item.status] }}
+                        </span>
+                    {% else %}
+                        <span class="text green">
+                            {{ status[item.status] }}
+                        </span>
+                    {% endif %}
+                </span>
+                <span class="col">
+                    <span class="title">Contractor</span>
+                    <span class="text">
+                        {% if (contractor|length) %}
+                            {% if (item.contractor in contractor|keys) %}
+                                {{ contractor[item.contractor] }}
+                            {% else %}
+                                ---
+                            {% endif %}
+                        {% endif %}
+                    </span>
+                </span>
+                <span class="col">
+                    <span class="title">Reported Date</span>
+                    <span class="text blue">{{ item.createdDate|date('M d, Y') }}</span>
+                </span>
+                <span class="col">
+                    <span class="title">Service time</span>
+                    <span class="text blue">
+                        {{ item.serviceDate|date('M d, Y') }} {{ item.serviceTime }}
+                    </span>
+                </span>
+            </a>
+        </div>
+    {% endfor %}
+    {{ knp_pagination_render(pagination) }}
+{% else %}
+    <a class="opener">
+        <span class="col">
+            <span class="text">No matches.</span>
+        </span>
+    </a>
+{% endif %}

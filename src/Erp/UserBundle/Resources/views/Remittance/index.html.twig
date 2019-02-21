@@ -1,0 +1,35 @@
+{% extends 'ErpUserBundle:Profile:base.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/erpcore/js/file-validator.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/erpcore/js/upload.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/erpuser/js/remittance.controller.js') }}"></script>
+{% endblock %}
+
+{% block pageContent %}
+    {{ parent() }}
+    <section id="managers-accounting" class="profile">
+        <div class="container">
+            <div class="row">
+                <div class="title-block">
+                    <h1 class="bold-text">Remittances</h1>
+                </div>
+            </div>
+            {% include "ErpCoreBundle:crossBlocks:message.html.twig" with {'alert_ok' : 'alert_ok', 'alert_error' : 'alert_error'} %}
+            <div class="row profile-widget-row profile-widget-custom">
+                <div class="row">
+                    <div class="form-group col-xs-12">
+                        <div class="pull-left">
+                            <a class="btn red-btn" type="submit" href="{{ path('erp_user_remittances_create') }}" role="popup">
+                                Add new remittance
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+                {{ render(controller('ErpUserBundle:Remittance:list')) }}
+            </div>
+        </div>
+    </section>
+{% endblock %}

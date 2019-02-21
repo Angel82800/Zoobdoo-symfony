@@ -1,0 +1,142 @@
+{% extends 'ErpUserBundle:Profile:base.html.twig' %}
+
+{% block headerBannerTitle %}
+    Manager
+{% endblock %}
+
+{% block javascript_inline %}
+    <script type="text/javascript">
+        (function ($) {
+            var $modal = $('#modal-invoice');
+
+            $('a[data-toggle="modal"]').on('click', function (event) {
+                event.preventDefault();
+                $.ajax({
+                    type: 'GET',
+                    cache: false,
+                    url: this.href || this.getAttribute('href'),
+                    dataType: 'json',
+                    async: true,
+                    success: function (response) {
+                        $modal.find('.modal-content').html(response.html);
+                        $modal.modal('show');
+                        return false;
+                    }
+                });
+            });
+
+            $modal.on('hide.bs.modal', function () {
+                var $this = $(this);
+                $this.removeData('bs.modal');
+                $this.find('.modal-content').html('');
+                return true;
+            });
+        })(jQuery);
+    </script>
+{% endblock %}
+
+{% block pageContent %}
+    {{ parent() }}
+
+
+     <div class="heading-area hidden-mobile">
+        <div class="container">
+            <h1><i class="icon icon-accounting"></i> Accounting</h1>
+        </div>
+    </div>
+    <main id="main">
+        <div class="tabs-area">
+            <div class="container">
+                <ul class="tabset">
+                    {% if user.hasRole(constant('Erp\\UserBundle\\Entity\\User::ROLE_MANAGER')) %}
+                        <li>
+                            <a href="{{ path('erp_user_accounting_index') }}" class="{{ currentRoute == 'erp_user_accounting_index' ? 'active' : '' }}">Ledger</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('erp_user_accounting_list_invoices') }}" class="{{ currentRoute == 'erp_user_accounting_list_invoices' ? 'active' : '' }}">Invoices</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="tab-content style">
+            <div id="tab1-0">
+                {% if user.hasRole(constant('Erp\\UserBundle\\Entity\\User::ROLE_MANAGER')) or user.hasRole(constant('Erp\\UserBundle\\Entity\\User::ROLE_LANDLORD')) %}
+                    {% include "ErpCoreBundle:crossBlocks:message.html.twig" with {'alert_ok' : 'alert_ok', 'alert_error' : 'alert_error'} %}
+                    
+                    {{ include('ErpUserBundle:Blocks:invoices-form-search.html.twig') }}
+                {% endif %}
+
+                <div class="container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Date Created</th>
+                                    <th >Sent To</th>
+                                    <th >Description</th>
+                                    <th >Amount</th>
+                                    <th >Status</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if (pagination|length) %}
+                                    {% for item in pagination %}
+                                        <tr>
+                                            <td date-title="Date Created">
+                                                {{ item.getCreatedAt()|date('M d, Y') }}<br/>
+                                                {{ item.getCreatedAt()|date('h:i:s') }}
+                                            </td>
+                                            <td date-title="Sent To">
+                                                {{ item.getReceiver().getEmail() }}
+                                            </td>
+                                            <td date-title="Description">
+                                                {% if (item.description) %}
+                                                    <em>{{ item.getDescription() }}</em>
+                                                {% endif %}
+                                            </td>
+                                            <td date-title="Amount">
+                                                {{ item.getAmount()|stripe_money(false) }}
+                                            </td>
+                                            <td date-title="Status">
+                                                <span class="invoice-status">{{ item.getStatus()|capitalize }}</span>
+                                            </td>
+                                            <td>
+                                                <a class="details-btn det-btn" href="{{ path('erp_user_accounting_show_invoice', {'invoiceId': item.getId(), '_format': 'html'}) }}" data-toggle="modal" data-target="#modal-invoice">
+                                                    Details
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="6" class="text-center">No matches.</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                        <ul class="btns-list">
+
+
+                            {% if (pagination|length) %}
+                                {{ knp_pagination_render(pagination) }}
+                                <li>
+                                    <a href="{{ pdf_link }}" class="btn-add green"><span class="img">$</span> Export as PDF</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('erp_user_landlords')}}" class="btn-add blue"><span class="img">+</span> Send new</a>
+                                </li>
+                            {% endif %}
+
+                        </ul>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="modal-invoice" tabindex="-1" role="dialog" aria-labelledy="modal-invoice">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content"></div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

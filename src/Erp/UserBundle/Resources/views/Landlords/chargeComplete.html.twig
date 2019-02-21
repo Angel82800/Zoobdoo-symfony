@@ -1,0 +1,33 @@
+{% extends '::base.html.twig' %}
+
+{% set headerWhiteClass = true %}
+
+{% block headerBannerTitle %}
+    Payment complete
+{% endblock %}
+
+{% block pageContent %}
+    {{ parent() }}
+<main id="main">
+    <div class="form-area style" id="managers-profile">
+        <div class="container">
+                <div class="field-area">
+                    <div class="lable">
+                        <label for="title">
+                            {{ charge.amount|money }} charged successfully.
+                        </label>
+                    </div>
+                </div>
+                <div class="field-area">
+                    <div class="wrap">
+                       <p>
+                           Thank you for cooperation.
+                       </p>
+                    </div>
+                </div>
+                {% include "ErpCoreBundle:crossBlocks:message.html.twig" with {'alert_ok' : 'alert_ok', 'alert_error' : 'alert_error'} %}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
